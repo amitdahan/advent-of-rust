@@ -3,5 +3,14 @@
 version = 3
 
 [[package]]
-name = "aoc_2021"
+name = "adjacent-pair-iterator"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2093cd186f4823b32952a607fd37ade78f7c46f54a33374d08f9923c45752883"
+
+[[package]]
+name = "advent_of_rust"
 version = "0.1.0"
+dependencies = [
+ "adjacent-pair-iterator",
+]
