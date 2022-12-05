@@ -2,17 +2,15 @@
 mod tests {
     use super::*;
 
-    const EXAMPLE_INPUT: &str = "A Y
-B X
-C Z";
-    const INPUT: &str = include_str!("day_2.in");
+    const EXAMPLE: &str = include_str!("example.in");
+    const INPUT: &str = include_str!("input.in");
 
     mod part1 {
         use super::*;
 
         #[test]
-        fn it_solves_example_input() {
-            let result = solve_part1(EXAMPLE_INPUT);
+        fn it_solves_example() {
+            let result = solve_part1(EXAMPLE);
             assert_eq!(result, 15);
         }
 
@@ -28,7 +26,7 @@ C Z";
 
         #[test]
         fn it_solves_example() {
-            let result = solve_part2(EXAMPLE_INPUT);
+            let result = solve_part2(EXAMPLE);
             assert_eq!(result, 12);
         }
 

@@ -4,31 +4,21 @@ use adjacent_pair_iterator::AdjacentPairIterator;
 mod tests {
     use super::*;
 
+    const EXAMPLE: &str = include_str!("example.in");
+    const INPUT: &str = include_str!("input.in");
+
     mod part1 {
         use super::*;
 
         #[test]
-        fn it_solves_example_1() {
-            let input = "199
-200
-208
-210
-200
-207
-240
-269
-260
-263";
-
-            let result = solve_part1(input);
+        fn it_solves_example() {
+            let result = solve_part1(EXAMPLE);
             assert_eq!(result, 7);
         }
 
         #[test]
-        fn it_solves_input_1() {
-            let input = include_str!("day_1.in");
-
-            let result = solve_part1(input);
+        fn it_solves_input() {
+            let result = solve_part1(INPUT);
             assert_eq!(result, 1301);
         }
     }

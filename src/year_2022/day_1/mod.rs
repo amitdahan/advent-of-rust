@@ -2,28 +2,15 @@
 mod tests {
     use super::*;
 
-    const EXAMPLE_INPUT: &str = "1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000";
-    const INPUT: &str = include_str!("day_1.in");
+    const EXAMPLE: &str = include_str!("example.in");
+    const INPUT: &str = include_str!("input.in");
 
     mod part1 {
         use super::*;
 
         #[test]
-        fn it_solves_example_input() {
-            let result = solve_part1(EXAMPLE_INPUT);
+        fn it_solves_example() {
+            let result = solve_part1(EXAMPLE);
             assert_eq!(result, 24000);
         }
 
@@ -39,7 +26,7 @@ mod tests {
 
         #[test]
         fn it_solves_example() {
-            let result = solve_part2(EXAMPLE_INPUT);
+            let result = solve_part2(EXAMPLE);
             assert_eq!(result, 45000);
         }
 
