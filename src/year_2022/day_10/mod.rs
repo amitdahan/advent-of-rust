@@ -64,7 +64,7 @@ enum Command {
 impl Command {
     fn cycles(&self) -> usize {
         match self {
-            Command::AddX(n) => 2,
+            Command::AddX(_) => 2,
             Command::Noop => 1,
         }
     }
