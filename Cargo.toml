@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 adjacent-pair-iterator = "1.0.0"
+nom = "7.1.1"
