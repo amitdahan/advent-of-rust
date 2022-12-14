@@ -1,5 +1,3 @@
-use adjacent_pair_iterator::AdjacentPairIterator;
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -28,7 +26,8 @@ pub fn solve_part1(input: &str) -> i32 {
     input
         .lines()
         .map(|line| line.parse::<i32>().unwrap())
-        .adjacent_pairs()
-        .filter(|(a, b)| b > a)
+        .collect::<Vec<i32>>()
+        .windows(2)
+        .filter(|window| window[1] > window[0])
         .count() as i32
 }
