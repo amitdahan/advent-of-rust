@@ -83,7 +83,6 @@ fn cube_neighbors(&(x, y, z): &Point) -> [Point; 6] {
 pub fn solve_part1(input: &str) -> u32 {
     let cubes = parse(input).into_iter().collect::<HashSet<Point>>();
 
-    // let mut faces_count = HashMap::new();
     let mut surface_area = 0;
 
     for cube in &cubes {
