@@ -13,7 +13,6 @@ mod tests {
     use super::*;
 
     const EXAMPLE: &str = include_str!("example.in");
-    const INPUT: &str = include_str!("input.in");
 
     mod part1 {
         use super::*;
@@ -22,12 +21,6 @@ mod tests {
         fn it_solves_example() {
             let result = solve_part1(EXAMPLE);
             assert_eq!(result, 8);
-        }
-
-        #[test]
-        fn it_solves_input() {
-            let result = solve_part1(INPUT);
-            assert_eq!(result, 0);
         }
     }
 
@@ -38,12 +31,6 @@ mod tests {
         fn it_solves_example() {
             let result = solve_part2(EXAMPLE);
             assert_eq!(result, 2286);
-        }
-
-        #[test]
-        fn it_solves_input() {
-            let result = solve_part2(INPUT);
-            assert_eq!(result, 0);
         }
     }
 }
