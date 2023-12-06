@@ -53,9 +53,10 @@ fn parse_input_2(input: &str) -> Round {
 }
 
 fn count_wins(Round { time, record }: &Round) -> u64 {
-    let is_winner = |speed: &_| (speed * (time - speed)) > *record;
-    let min_hold_time = (0..=*time).find(is_winner).unwrap();
-    let max_hold_time = (0..=*time).rfind(is_winner).unwrap();
+    let min_hold_time = (0..=*time)
+        .find(|speed| (speed * (time - speed)) > *record)
+        .unwrap();
+    let max_hold_time = time - min_hold_time;
     max_hold_time - min_hold_time + 1
 }
 
