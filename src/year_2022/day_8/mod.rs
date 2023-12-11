@@ -54,63 +54,55 @@ fn parse_trees(input: &str) -> Vec<Vec<i32>> {
 pub fn solve_part1(input: &str) -> i32 {
     let mat = parse_trees(input);
 
-    // Keys are `row_idx,col_idx` strings
-    let mut counted: HashSet<String> = HashSet::new();
+    let mut counted = HashSet::new();
 
-    for row_idx in 0..mat.len() {
-        let row = &mat[row_idx];
-        let col_idx = 0;
-        let mut row_max = row[col_idx];
-        counted.insert(format!("{},{}", row_idx, col_idx));
+    for (row_idx, row) in mat.iter().enumerate() {
+        let mut row_max = row[0];
+        counted.insert((row_idx, 0usize));
 
-        for col_idx in 1..row.len() {
-            let cell = row[col_idx];
+        for (col_idx, &cell) in row.iter().enumerate().skip(1) {
             if cell > row_max {
                 row_max = cell;
-                counted.insert(format!("{},{}", row_idx, col_idx));
+                counted.insert((row_idx, col_idx));
             }
         }
     }
 
-    for row_idx in 0..mat.len() {
-        let row = &mat[row_idx];
+    for (row_idx, row) in mat.iter().enumerate() {
         let col_idx = row.len() - 1;
         let mut row_max = row[col_idx];
-        counted.insert(format!("{},{}", row_idx, col_idx));
+        counted.insert((row_idx, col_idx));
 
-        for col_idx in (0..row.len() - 1).rev() {
-            let cell = row[col_idx];
+        for (col_idx, &cell) in row.iter().enumerate().rev().skip(1) {
             if cell > row_max {
                 row_max = cell;
-                counted.insert(format!("{},{}", row_idx, col_idx));
+                counted.insert((row_idx, col_idx));
             }
         }
     }
 
-    for col_idx in 0..mat[0].len() {
-        let row_idx = 0;
-        let mut col_max = mat[row_idx][col_idx];
-        counted.insert(format!("{},{}", row_idx, col_idx));
+    for (col_idx, _) in mat[0].iter().enumerate() {
+        let mut col_max = mat[0][col_idx];
+        counted.insert((0usize, col_idx));
 
-        for row_idx in 1..mat.len() {
-            let cell = mat[row_idx][col_idx];
+        for (row_idx, row) in mat.iter().enumerate().skip(1) {
+            let cell = row[col_idx];
             if cell > col_max {
                 col_max = cell;
-                counted.insert(format!("{},{}", row_idx, col_idx));
+                counted.insert((row_idx, col_idx));
             }
         }
     }
 
-    for col_idx in 0..mat[0].len() {
-        let row_idx = mat.len() - 1;
-        let mut col_max = mat[row_idx][col_idx];
-        counted.insert(format!("{},{}", row_idx, col_idx));
+    for (col_idx, _) in mat[0].iter().enumerate() {
+        let mut col_max = mat[mat.len() - 1][col_idx];
+        counted.insert((mat.len() - 1, col_idx));
 
-        for row_idx in (0..mat.len() - 1).rev() {
-            let cell = mat[row_idx][col_idx];
+        for (row_idx, row) in mat.iter().enumerate().rev().skip(1) {
+            let cell = row[col_idx];
             if cell > col_max {
                 col_max = cell;
-                counted.insert(format!("{},{}", row_idx, col_idx));
+                counted.insert((row_idx, col_idx));
             }
         }
     }
@@ -123,40 +115,38 @@ pub fn solve_part2(input: &str) -> i32 {
 
     let mut max_scenic_score = 0;
 
-    for row_idx in 0..mat.len() {
-        let row = &mat[row_idx];
-
-        for col_idx in 1..row.len() {
+    for (row_idx, row) in mat.iter().enumerate() {
+        for (col_idx, _) in row.iter().enumerate().skip(1) {
             let cell = row[col_idx];
 
             let mut top_distance = 0;
-            for top_row_idx in (0..row_idx).rev() {
+            for row in mat.iter().take(row_idx).rev() {
                 top_distance += 1;
-                if mat[top_row_idx][col_idx] >= cell {
+                if row[col_idx] >= cell {
                     break;
                 }
             }
 
             let mut bottom_distance = 0;
-            for bottom_row_idx in row_idx + 1..mat.len() {
+            for row in mat.iter().skip(row_idx + 1) {
                 bottom_distance += 1;
-                if mat[bottom_row_idx][col_idx] >= cell {
+                if row[col_idx] >= cell {
                     break;
                 }
             }
 
             let mut left_distance = 0;
-            for left_col_idx in (0..col_idx).rev() {
+            for &cell2 in row.iter().take(col_idx).rev() {
                 left_distance += 1;
-                if row[left_col_idx] >= cell {
+                if cell2 >= cell {
                     break;
                 }
             }
 
             let mut right_distance = 0;
-            for right_col_idx in col_idx + 1..row.len() {
+            for &cell2 in row.iter().skip(col_idx + 1) {
                 right_distance += 1;
-                if row[right_col_idx] >= cell {
+                if cell2 >= cell {
                     break;
                 }
             }

@@ -80,11 +80,8 @@ fn parse(input: &str) -> HashSet<Position> {
 
     for (y, line) in input.lines().enumerate() {
         for (x, c) in line.chars().enumerate() {
-            match c {
-                '#' => {
-                    map.insert((x as i32, y as i32));
-                }
-                _ => {}
+            if c == '#' {
+                map.insert((x as i32, y as i32));
             }
         }
     }
@@ -134,18 +131,18 @@ fn step(map: &mut HashSet<Position>, priorities: &VecDeque<[(i32, i32); 3]>) -> 
     }
 
     let mut destinations = HashMap::new();
-    for (_, dest) in &moves {
+    for dest in moves.values() {
         *destinations.entry(*dest).or_insert(0) += 1;
     }
 
     moves.retain(|_, dest| destinations[dest] == 1);
 
     for (src, dest) in &moves {
-        map.remove(&src);
+        map.remove(src);
         map.insert(*dest);
     }
 
-    moves.len() > 0
+    !moves.is_empty()
 }
 
 pub fn solve_part1(input: &str) -> u32 {

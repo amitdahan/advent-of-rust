@@ -116,7 +116,7 @@ fn parse_fs(input: &str) -> DirEntry {
                 for dir in context.iter() {
                     curr = curr.dirs.get_mut(dir).unwrap();
                 }
-                (*curr).dirs.insert(
+                curr.dirs.insert(
                     dir_name.to_string(),
                     DirEntry {
                         name: dir_name.to_string(),
@@ -131,7 +131,7 @@ fn parse_fs(input: &str) -> DirEntry {
                     curr = curr.dirs.get_mut(dir).unwrap();
                 }
                 curr.files
-                    .insert(name.to_string(), FileEntry { size: size });
+                    .insert(name.to_string(), FileEntry { size });
             }
         };
     }

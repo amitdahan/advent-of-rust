@@ -145,7 +145,7 @@ pub fn solve_part2(input: &str) -> u32 {
 
     for cube in &cubes {
         for neighbor in &cube_neighbors(cube) {
-            if !cubes.contains(&neighbor) && leads_outside(&cubes, neighbor, &bounds) {
+            if !cubes.contains(neighbor) && leads_outside(&cubes, neighbor, &bounds) {
                 surface_area += 1;
             }
         }

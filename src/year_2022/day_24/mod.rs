@@ -135,8 +135,8 @@ fn rewind((x, y): Position, dir: Direction, width: u32, height: u32, time: u32) 
     );
 
     let (x, y) = (
-        (x + dx as i32 * time as i32) % width as i32,
-        (y + dy as i32 * time as i32) % height as i32,
+        (x + dx * time as i32) % width as i32,
+        (y + dy * time as i32) % height as i32,
     );
 
     (
@@ -153,9 +153,7 @@ fn neighbors(pos: Position, width: u32, height: u32, end: Position) -> Vec<Posit
     for (dx, dy) in &[(0, -1), (0, 1), (-1, 0), (1, 0)] {
         let (x, y) = (x + dx, y + dy);
 
-        if x >= 0 && y >= 0 && x < width as i32 && y < height as i32 {
-            result.push((x, y));
-        } else if (x, y) == end {
+        if (x >= 0 && y >= 0 && x < width as i32 && y < height as i32) || (x, y) == end {
             result.push((x, y));
         }
     }
@@ -221,12 +219,12 @@ fn get_best_time(
                 continue;
             }
 
-            if can_move(&blizzards, next_pos, next_time, width, height, start, end) {
+            if can_move(blizzards, next_pos, next_time, width, height, start, end) {
                 visited.insert((next_pos, next_time));
                 q.push_back((next_pos, next_time));
             }
         }
-        if can_move(&blizzards, pos, next_time, width, height, start, end) {
+        if can_move(blizzards, pos, next_time, width, height, start, end) {
             visited.insert((pos, next_time));
             q.push_back((pos, next_time));
         }

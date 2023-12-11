@@ -92,7 +92,7 @@ fn snafu_to_u64(snafu: &str) -> u64 {
                 _ => unreachable!(),
             };
 
-            value * (5 as i64).pow(i as u32)
+            value * 5_i64.pow(i as u32)
         })
         .sum::<i64>() as u64
 }

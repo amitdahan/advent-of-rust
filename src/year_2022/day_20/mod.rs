@@ -87,7 +87,7 @@ pub fn solve_part1(input: &str) -> i64 {
         .position(|&x| x == zero_idx)
         .unwrap();
 
-    vec![1_000, 2_000, 3_000]
+    [1_000, 2_000, 3_000]
         .iter()
         .map(|i| numbers[original_indices[(zero_idx + i) % numbers.len()]])
         .sum()
@@ -112,7 +112,7 @@ pub fn solve_part2(input: &str) -> i64 {
         .position(|&x| x == zero_idx)
         .unwrap();
 
-    vec![1000, 2000, 3000]
+    [1000, 2000, 3000]
         .iter()
         .map(|i| numbers[original_indices[(zero_idx + i) % numbers.len()]])
         .sum()

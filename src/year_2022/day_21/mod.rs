@@ -96,7 +96,7 @@ fn entry(input: &str) -> IResult<&str, Entry> {
 }
 fn line(input: &str) -> IResult<&str, (&str, Entry)> {
     let (input, name) = terminated(alpha1, tag(": "))(input)?;
-    let (input, entry) = alt((map(i64, |n| Entry::Num(n)), entry))(input)?;
+    let (input, entry) = alt((map(i64, Entry::Num), entry))(input)?;
 
     Ok((input, (name, entry)))
 }
@@ -125,22 +125,22 @@ fn resolve_monkey(
     }
 
     let result = match data.get(name).unwrap() {
-        Entry::Add(ref left, ref right) => {
+        Entry::Add(left, right) => {
             resolve_monkey(left, data, cache) + resolve_monkey(right, data, cache)
         }
-        Entry::Sub(ref left, ref right) => {
+        Entry::Sub(left, right) => {
             resolve_monkey(left, data, cache) - resolve_monkey(right, data, cache)
         }
-        Entry::Mul(ref left, ref right) => {
+        Entry::Mul(left, right) => {
             resolve_monkey(left, data, cache) * resolve_monkey(right, data, cache)
         }
-        Entry::Div(ref left, ref right) => {
+        Entry::Div(left, right) => {
             resolve_monkey(left, data, cache) / resolve_monkey(right, data, cache)
         }
         Entry::Num(n) => *n,
     };
 
-    cache.insert(name.to_string(), result.clone());
+    cache.insert(name.to_string(), result);
 
     result
 }
@@ -155,12 +155,12 @@ pub fn solve_part2(input: &str) -> i64 {
     let data = parse(input);
 
     let (left, right) = match data.get("root") {
-        Some(&Entry::Add(ref left, ref right)) => (left, right),
+        Some(Entry::Add(left, right)) => (left, right),
         _ => unreachable!(),
     };
 
     let mut needs_humn_cache = HashMap::new();
-    let left_needs_humn = needs_humn(&data, left, &mut needs_humn_cache);
+    let left_needs_humn = needs_humn(&data, left, &needs_humn_cache);
 
     let mut resolve_cache = HashMap::new();
 
@@ -195,18 +195,10 @@ fn needs_humn(data: &HashMap<&str, Entry>, name: &str, cache: &HashMap<String, b
         Entry::Div("humn", _) => true,
         Entry::Div(_, "humn") => true,
 
-        Entry::Add(left, right) => {
-            needs_humn(data, &left, cache) || needs_humn(data, &right, cache)
-        }
-        Entry::Sub(left, right) => {
-            needs_humn(data, &left, cache) || needs_humn(data, &right, cache)
-        }
-        Entry::Mul(left, right) => {
-            needs_humn(data, &left, cache) || needs_humn(data, &right, cache)
-        }
-        Entry::Div(left, right) => {
-            needs_humn(data, &left, cache) || needs_humn(data, &right, cache)
-        }
+        Entry::Add(left, right) => needs_humn(data, left, cache) || needs_humn(data, right, cache),
+        Entry::Sub(left, right) => needs_humn(data, left, cache) || needs_humn(data, right, cache),
+        Entry::Mul(left, right) => needs_humn(data, left, cache) || needs_humn(data, right, cache),
+        Entry::Div(left, right) => needs_humn(data, left, cache) || needs_humn(data, right, cache),
         Entry::Num(_) => false,
     }
 }

@@ -183,24 +183,30 @@ mod tests {
 
 type ArrayItem = Vec<Item>;
 
-#[derive(Debug, PartialEq, Eq, Ord)]
+#[derive(Debug, PartialEq, Eq)]
 enum Item {
     ArrayItem(ArrayItem),
     SingleItem(u32),
 }
 
-impl PartialOrd for Item {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+impl Ord for Item {
+    fn cmp(&self, other: &Self) -> Ordering {
         match (self, other) {
-            (Item::SingleItem(a), Item::SingleItem(b)) => a.partial_cmp(b),
-            (Item::ArrayItem(a), Item::ArrayItem(b)) => a.partial_cmp(b),
+            (Item::SingleItem(a), Item::SingleItem(b)) => a.cmp(b),
+            (Item::ArrayItem(a), Item::ArrayItem(b)) => a.cmp(b),
             (Item::SingleItem(a), Item::ArrayItem(_)) => {
-                Item::ArrayItem(vec![Item::SingleItem(*a)]).partial_cmp(other)
+                Item::ArrayItem(vec![Item::SingleItem(*a)]).cmp(other)
             }
             (Item::ArrayItem(_), Item::SingleItem(b)) => {
-                self.partial_cmp(&Item::ArrayItem(vec![Item::SingleItem(*b)]))
+                self.cmp(&Item::ArrayItem(vec![Item::SingleItem(*b)]))
             }
         }
+    }
+}
+
+impl PartialOrd for Item {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
