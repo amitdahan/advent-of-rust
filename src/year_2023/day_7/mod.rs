@@ -39,7 +39,7 @@ mod tests {
 
 type Card = u8; // 2..=14
 
-#[derive(Debug, Eq, PartialEq, Ord)]
+#[derive(Debug, Eq, PartialEq)]
 enum HandType {
     FiveOfAKind,
     FourOfAKind,
@@ -50,9 +50,9 @@ enum HandType {
     HighCard,
 }
 
-impl PartialOrd for HandType {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(match (self, other) {
+impl Ord for HandType {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match (self, other) {
             (x, y) if x == y => Ordering::Equal,
             (Self::FiveOfAKind, _) => Ordering::Greater,
             (_, Self::FiveOfAKind) => Ordering::Less,
@@ -67,11 +67,16 @@ impl PartialOrd for HandType {
             (Self::OnePair, _) => Ordering::Greater,
             (_, Self::OnePair) => Ordering::Less,
             _ => unreachable!(),
-        })
+        }
+    }
+}
+impl PartialOrd for HandType {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord)]
+#[derive(Debug, Eq, PartialEq)]
 struct Hand {
     cards: [Card; 5],
 }
@@ -97,19 +102,24 @@ impl Hand {
     }
 }
 
-impl PartialOrd for Hand {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+impl Ord for Hand {
+    fn cmp(&self, other: &Self) -> Ordering {
         let self_type = self.hand_type();
         let other_type = other.hand_type();
         if self_type == other_type {
-            self.cards.partial_cmp(&other.cards)
+            self.cards.cmp(&other.cards)
         } else {
-            self_type.partial_cmp(&other_type)
+            self_type.cmp(&other_type)
         }
     }
 }
+impl PartialOrd for Hand {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
 
-#[derive(Debug, Eq, PartialEq, Ord)]
+#[derive(Debug, Eq, PartialEq)]
 struct HandWithJokers {
     cards: [Card; 5],
 }
@@ -181,15 +191,20 @@ impl HandWithJokers {
     }
 }
 
-impl PartialOrd for HandWithJokers {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+impl Ord for HandWithJokers {
+    fn cmp(&self, other: &Self) -> Ordering {
         let self_type = self.hand_type();
         let other_type = other.hand_type();
         if self_type == other_type {
-            self.cards.partial_cmp(&other.cards)
+            self.cards.cmp(&other.cards)
         } else {
-            self_type.partial_cmp(&other_type)
+            self_type.cmp(&other_type)
         }
+    }
+}
+impl PartialOrd for HandWithJokers {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 

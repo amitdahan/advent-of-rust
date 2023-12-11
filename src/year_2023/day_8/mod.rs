@@ -51,6 +51,8 @@ enum Instruction {
     Right,
 }
 
+type Graph<'a> = HashMap<&'a str, (&'a str, &'a str)>;
+
 fn parse_instructions(input: &str) -> IResult<&str, Vec<Instruction>> {
     many1(alt((
         map(tag("L"), |_| Instruction::Left),
@@ -71,17 +73,17 @@ fn parse_edge(input: &str) -> IResult<&str, (&str, (&str, &str))> {
         ),
     )(input)
 }
-fn parse_graph(input: &str) -> IResult<&str, HashMap<&str, (&str, &str)>> {
+fn parse_graph(input: &str) -> IResult<&str, Graph> {
     let (input, edges) = separated_list1(newline, parse_edge)(input)?;
 
-    Ok((input, HashMap::from_iter(edges.into_iter())))
+    Ok((input, Graph::from_iter(edges)))
 }
-fn parse_input(input: &str) -> IResult<&str, (Vec<Instruction>, HashMap<&str, (&str, &str)>)> {
+fn parse_input(input: &str) -> IResult<&str, (Vec<Instruction>, Graph)> {
     separated_pair(parse_instructions, count(newline, 2), parse_graph)(input)
 }
 
 fn solve(
-    graph: &HashMap<&str, (&str, &str)>,
+    graph: &Graph,
     instructions: &[Instruction],
     start: &str,
     predicate: impl Fn(&str) -> bool,
@@ -113,7 +115,7 @@ pub fn solve_part2(input: &str) -> u64 {
     graph
         .keys()
         .filter(|k| k.chars().nth(2).unwrap() == 'A')
-        .map(|k| solve(&graph, &instructions, k, |k| k.ends_with("Z")))
+        .map(|k| solve(&graph, &instructions, k, |k| k.ends_with('Z')))
         .reduce(lcm)
         .unwrap()
 }

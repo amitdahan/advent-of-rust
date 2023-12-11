@@ -1,6 +1,5 @@
-use std::collections::HashSet;
-
 use itertools::Itertools;
+use std::collections::HashSet;
 
 #[cfg(test)]
 mod tests {

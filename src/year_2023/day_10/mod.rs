@@ -195,10 +195,10 @@ pub fn solve_part2(input: &str) -> u32 {
 
     let mut count = 0;
 
-    for y in 0..map.len() {
+    for (y, _) in map.iter().enumerate() {
         let mut intersects = 0;
 
-        for x in 0..map[y].len() {
+        for (x, _) in map[y].iter().enumerate() {
             if visited.contains(&(x, y)) {
                 if matches!(map[y][x], 'J' | 'L' | '|') {
                     intersects += 1;
