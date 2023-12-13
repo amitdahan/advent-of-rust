@@ -35,20 +35,15 @@ mod tests {
 }
 
 fn reflection(nums: &[u32], xored_ones: u32) -> Option<usize> {
-    for i in 1..nums.len() {
-        if nums[0..i]
+    (1..nums.len()).find(|&i| {
+        nums[0..i]
             .iter()
             .rev()
             .zip(nums[i..nums.len()].iter())
             .map(|(a, b)| (a ^ b).count_ones())
             .sum::<u32>()
             == xored_ones
-        {
-            return Some(i);
-        }
-    }
-
-    None
+    })
 }
 fn horizontal_reflection(map: &Map, xored_ones: u32) -> Option<usize> {
     let mut cols = vec![0; map[0].len()];

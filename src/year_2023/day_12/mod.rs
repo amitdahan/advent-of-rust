@@ -44,6 +44,8 @@ enum Status {
     Unknown,
 }
 
+type Record = (Vec<Status>, Vec<u32>);
+
 fn parse_status(input: &str) -> IResult<&str, Status> {
     alt((
         map(tag("."), |_| Status::Operational),
@@ -51,7 +53,7 @@ fn parse_status(input: &str) -> IResult<&str, Status> {
         map(tag("?"), |_| Status::Unknown),
     ))(input)
 }
-fn parse(input: &str) -> IResult<&str, Vec<(Vec<Status>, Vec<u32>)>> {
+fn parse(input: &str) -> IResult<&str, Vec<Record>> {
     separated_list1(
         newline,
         separated_pair(
@@ -112,31 +114,28 @@ fn count_arrangements(
     }
 }
 
-fn unfold(statuses: &[Status], groups: &[u32]) -> (Vec<Status>, Vec<u32>) {
-    let statuses = statuses.iter().cloned().collect::<Vec<_>>();
-    let groups = groups.iter().cloned().collect::<Vec<_>>();
-
+fn unfold((statuses, groups): &Record) -> Record {
     let statuses = [
-        statuses.clone(),
+        statuses.to_vec(),
         vec![Status::Unknown],
-        statuses.clone(),
+        statuses.to_vec(),
         vec![Status::Unknown],
-        statuses.clone(),
+        statuses.to_vec(),
         vec![Status::Unknown],
-        statuses.clone(),
+        statuses.to_vec(),
         vec![Status::Unknown],
-        statuses,
+        statuses.to_vec(),
     ]
     .into_iter()
     .flatten()
     .collect::<Vec<_>>();
 
     let groups = [
-        groups.clone(),
-        groups.clone(),
-        groups.clone(),
-        groups.clone(),
-        groups,
+        groups.to_vec(),
+        groups.to_vec(),
+        groups.to_vec(),
+        groups.to_vec(),
+        groups.to_vec(),
     ]
     .into_iter()
     .flatten()
@@ -144,7 +143,7 @@ fn unfold(statuses: &[Status], groups: &[u32]) -> (Vec<Status>, Vec<u32>) {
 
     (statuses, groups)
 }
-fn solve(rows: &[(Vec<Status>, Vec<u32>)]) -> u64 {
+fn solve(rows: &[Record]) -> u64 {
     rows.iter()
         .map(|(statuses, groups)| count_arrangements(statuses, groups, None, &mut HashMap::new()))
         .sum()
@@ -155,10 +154,7 @@ pub fn solve_part1(input: &str) -> u64 {
 }
 pub fn solve_part2(input: &str) -> u64 {
     let (_, rows) = parse(input).unwrap();
-    let rows = rows
-        .iter()
-        .map(|(statuses, groups)| unfold(statuses, groups))
-        .collect::<Vec<_>>();
+    let rows = rows.iter().map(unfold).collect::<Vec<_>>();
 
     solve(&rows)
 }
