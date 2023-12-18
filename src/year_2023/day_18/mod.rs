@@ -108,7 +108,7 @@ fn solve(dig_plan: &[&Instruction]) -> u64 {
         .map(|((x1, y1), (x2, y2))| x1 as i64 * y2 as i64 - x2 as i64 * y1 as i64)
         .sum::<i64>()
         / 2)
-    .abs() as u64;
+    .unsigned_abs();
 
     perimeter / 2 + area + 1
 }
