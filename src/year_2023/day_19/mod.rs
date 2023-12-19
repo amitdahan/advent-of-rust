@@ -184,8 +184,8 @@ pub fn solve_part1(input: &str) -> u32 {
         .sum()
 }
 
-fn reject_paths<'a>(
-    workflows: &'a HashMap<&str, Vec<(Rule, &str)>>,
+fn reject_paths(
+    workflows: &HashMap<&str, Vec<(Rule, &str)>>,
     curr: &str,
     path: &mut Vec<Rule>,
     paths: &mut Vec<Vec<Rule>>,
