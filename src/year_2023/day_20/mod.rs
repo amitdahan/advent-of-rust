@@ -79,7 +79,7 @@ fn parse(input: &str) -> IResult<&str, (HashMap<&str, Module>, HashMap<&str, Vec
 
     for (name, destinations) in &configurations {
         for destination in destinations {
-            if let None = modules.get(destination) {
+            if !modules.contains_key(destination) {
                 modules.insert(destination, Module::Untyped);
             }
 
@@ -173,7 +173,7 @@ pub fn solve_part2(input: &str) -> u128 {
     let (_, (mut modules, configurations)) = parse(input).unwrap();
 
     let rx_conjunction = configurations.iter().find_map(|(name, destinations)| {
-        if destinations == &&["rx"] {
+        if destinations == &["rx"] {
             Some(*name)
         } else {
             None
